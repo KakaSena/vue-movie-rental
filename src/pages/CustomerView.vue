@@ -1,14 +1,23 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { customerMockData } from '@/mocks/customers'
 import CustomerForm from '@/components/customer/CustomerForm.vue'
 import CustomerTable from '@/components/customer/CustomerTable.vue'
 import Button from '@/components/ui/Button.vue'
+import SearchInput from '@/components/search/SearchInput.vue'
+import SelectInput from '@/components/search/SelectInput.vue'
 
 const customers = ref([...customerMockData])
-
 const isDialogOpen = ref(false)
 const currentCustomer = ref(null)
+const searchTerm = ref('')
+const statusFilter = ref('all')
+
+const statusOptions = [
+  { value: 'all', label: 'All Statuses' },
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+]
 
 const openDialog = (customer = null) => {
   currentCustomer.value = customer
@@ -45,12 +54,43 @@ const toggleCustomerStatus = (customerId) => {
     customer.status = customer.status === 'active' ? 'inactive' : 'active'
   }
 }
+
+const filteredCustomers = computed(() => {
+  let result = customers.value
+
+  // Apply status filter if not 'all'
+  if (statusFilter.value !== 'all') {
+    result = result.filter((customer) => customer.status === statusFilter.value)
+  }
+
+  // Apply search term filter if exists
+  if (searchTerm.value) {
+    const term = searchTerm.value.toLowerCase()
+    result = result.filter((customer) => {
+      return (
+        customer.firstName.toLowerCase().includes(term) ||
+        customer.lastName.toLowerCase().includes(term) ||
+        customer.cpf.includes(term) ||
+        customer.email.toLowerCase().includes(term) ||
+        customer.phone.includes(term)
+      )
+    })
+  }
+
+  return result
+})
 </script>
 
 <template>
   <div class="space-y-6">
-    <div class="flex justify-end">
-      <Button @click="openDialog()" class="mb-4"> Add Customer </Button>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex-1">
+        <SearchInput v-model="searchTerm" placeholder="Search by name, CPF, email or phone" />
+      </div>
+      <div class="flex items-center gap-4">
+        <SelectInput v-model="statusFilter" :options="statusOptions" class="w-40" />
+        <Button @click="openDialog()">Add Customer</Button>
+      </div>
     </div>
 
     <CustomerForm
@@ -62,7 +102,7 @@ const toggleCustomerStatus = (customerId) => {
     />
 
     <CustomerTable
-      :customers="customers.map(formatForDisplay)"
+      :customers="filteredCustomers.map(formatForDisplay)"
       @edit="openDialog"
       @deactivate="toggleCustomerStatus"
     />
