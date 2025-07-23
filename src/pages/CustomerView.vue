@@ -8,26 +8,24 @@ const clients = ref([
   {
     id: 1,
     name: 'John Doe',
-    cpf: '123.456.789-00',
+    cpf: '12345678900',
     email: 'john@example.com',
-    phone: '(11) 98765-4321',
+    phone: '11987654321',
     status: 'active',
   },
   {
     id: 2,
     name: 'Jane Smith',
-    cpf: '987.654.321-00',
+    cpf: '98765432100',
     email: 'jane@example.com',
-    phone: '(11) 91234-5678',
+    phone: '11912345678',
     status: 'inactive',
   },
 ])
 
-// State
 const isDialogOpen = ref(false)
 const currentCustomer = ref(null)
 
-// Actions
 const openDialog = (client = null) => {
   currentCustomer.value = client
   isDialogOpen.value = true
@@ -35,19 +33,25 @@ const openDialog = (client = null) => {
 
 const handleSubmit = (clientData) => {
   if (clientData.id) {
-    // Update existing client
     const index = clients.value.findIndex((c) => c.id === clientData.id)
     if (index !== -1) {
       clients.value[index] = clientData
     }
   } else {
-    // Add new client
     clients.value.push({
       ...clientData,
-      id: Date.now(), // Simple ID generation
+      id: Date.now(),
     })
   }
   isDialogOpen.value = false
+}
+
+const formatForDisplay = (client) => {
+  return {
+    ...client,
+    cpf: client.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'),
+    phone: client.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'),
+  }
 }
 
 const toggleCustomerStatus = (clientId) => {
@@ -67,11 +71,15 @@ const toggleCustomerStatus = (clientId) => {
     <CustomerForm
       v-if="isDialogOpen"
       :isOpen="isDialogOpen"
-      :client="currentCustomer"
+      :customer="currentCustomer"
       @submit="handleSubmit"
       @close="isDialogOpen = false"
     />
 
-    <CustomerTable :clients="clients" @edit="openDialog" @deactivate="toggleCustomerStatus" />
+    <CustomerTable
+      :clients="clients.map(formatForDisplay)"
+      @edit="openDialog"
+      @deactivate="toggleCustomerStatus"
+    />
   </div>
 </template>

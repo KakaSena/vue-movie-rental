@@ -31,7 +31,6 @@ const vMask = mask
 const phoneError = ref('')
 const cpfError = ref('')
 
-// Computed property to check if form is valid
 const isFormValid = computed(() => {
   return formData.value.name.trim() && !cpfError.value && !phoneError.value
 })
@@ -92,7 +91,6 @@ const handleSubmit = () => {
     return
   }
 
-  // Clean data before submitting
   const submitData = {
     ...formData.value,
     cpf: formData.value.cpf.replace(/\D/g, ''),
@@ -110,7 +108,6 @@ const handleSubmit = () => {
     @close="$emit('close')"
   >
     <form @submit.prevent="handleSubmit" class="space-y-4">
-      <!-- Name Field -->
       <div>
         <label class="block text-sm font-medium mb-1">Name *</label>
         <input
@@ -121,7 +118,6 @@ const handleSubmit = () => {
         />
       </div>
 
-      <!-- CPF Field with validation -->
       <div>
         <label class="block text-sm font-medium mb-1">CPF *</label>
         <input
@@ -136,13 +132,11 @@ const handleSubmit = () => {
         <p v-if="cpfError" class="mt-1 text-sm text-red-600">{{ cpfError }}</p>
       </div>
 
-      <!-- Email Field -->
       <div>
         <label class="block text-sm font-medium mb-1">Email</label>
         <input v-model="formData.email" type="email" class="w-full p-2 border rounded" />
       </div>
 
-      <!-- Phone Field with validation -->
       <div>
         <label class="block text-sm font-medium mb-1">Phone *</label>
         <input
@@ -157,7 +151,6 @@ const handleSubmit = () => {
         <p v-if="phoneError" class="mt-1 text-sm text-red-600">{{ phoneError }}</p>
       </div>
 
-      <!-- Status Field -->
       <div>
         <label class="block text-sm font-medium mb-1">Status</label>
         <select v-model="formData.status" class="w-full p-2 border rounded">
