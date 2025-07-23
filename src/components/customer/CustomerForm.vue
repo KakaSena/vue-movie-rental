@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import BaseDialog from '@/components/ui/BaseDialog.vue'
 import Button from '@/components/ui/Button.vue'
+import { mask } from 'vue-the-mask'
 
 const props = defineProps({
   isOpen: {
@@ -24,7 +25,8 @@ const formData = ref({
   status: 'active',
 })
 
-// Watch for client changes to populate form
+const vMask = mask
+
 watch(
   () => props.client,
   (newCustomer) => {
@@ -64,6 +66,7 @@ const handleSubmit = () => {
         <label class="block text-sm font-medium mb-1">CPF *</label>
         <input
           v-model="formData.cpf"
+          v-mask="'###.###.###-##'"
           required
           class="w-full p-2 border rounded"
           placeholder="000.000.000-00"
