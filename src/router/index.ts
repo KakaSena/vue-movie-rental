@@ -31,9 +31,9 @@ const router = createRouter({
           name: 'users',
         },
         {
-          path: 'clients',
+          path: 'customers',
           component: CustomerView,
-          name: 'clients',
+          name: 'customers',
         },
         {
           path: 'rentals',
