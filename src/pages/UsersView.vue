@@ -1,0 +1,60 @@
+<script setup>
+import { ref } from 'vue'
+import UserForm from '@/components/users/UserForm.vue'
+import UserTable from '@/components/users/UserTable.vue'
+import Button from '@/components/ui/Button.vue'
+
+const users = ref([
+  { id: 1, name: 'John Doe', document: '123456789', status: 'active' },
+  { id: 2, name: 'Jane Smith', document: '987654321', status: 'inactive' },
+])
+
+// State
+const isDialogOpen = ref(false)
+const currentUser = ref(null)
+
+// Actions
+const openDialog = (user = null) => {
+  currentUser.value = user
+  isDialogOpen.value = true
+}
+
+const handleSubmit = (userData) => {
+  if (userData.id) {
+    // Update existing user
+    const index = users.value.findIndex((u) => u.id === userData.id)
+    if (index !== -1) {
+      users.value[index] = userData
+    }
+  } else {
+    // Add new user
+    users.value.push({
+      ...userData,
+      id: Date.now(), // Simple ID generation
+    })
+  }
+  isDialogOpen.value = false
+}
+
+const handleDeactivate = (userId) => {
+  users.value = users.value.filter((user) => user.id !== userId)
+}
+</script>
+
+<template>
+  <div class="space-y-6">
+    <div class="flex justify-end">
+      <Button @click="openDialog()" class="mb-4"> Add User </Button>
+    </div>
+
+    <UserForm
+      v-if="isDialogOpen"
+      :isOpen="isDialogOpen"
+      :user="currentUser"
+      @submit="handleSubmit"
+      @close="isDialogOpen = false"
+    />
+
+    <UserTable :users="users" @edit="openDialog" @deactivate="handleDeactivate" />
+  </div>
+</template>
