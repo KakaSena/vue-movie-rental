@@ -1,13 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import { userMockData } from '@/mocks/users'
 import UserForm from '@/components/users/UserForm.vue'
 import UserTable from '@/components/users/UserTable.vue'
 import Button from '@/components/ui/Button.vue'
 
-const users = ref([
-  { id: 1, name: 'John Doe', document: '123456789', status: 'active' },
-  { id: 2, name: 'Jane Smith', document: '987654321', status: 'inactive' },
-])
+const users = ref([...userMockData])
 
 // State
 const isDialogOpen = ref(false)
