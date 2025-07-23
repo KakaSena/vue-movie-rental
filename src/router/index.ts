@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginForm from '@/pages/LoginForm.vue'
+/* import LoginForm from '@/pages/LoginForm.vue' */
 import Dashboard from '@/pages/Dashboard.vue'
 import UsersView from '@/pages/UsersView.vue'
 import CustomerView from '@/pages/CustomerView.vue'
@@ -9,11 +9,11 @@ import RentalsView from '@/pages/RentalsView.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    {
+    /* {
       path: '/',
       name: 'login',
       component: LoginForm,
-    },
+    }, */
     {
       path: '/dashboard',
       name: 'dashboard',
