@@ -75,7 +75,12 @@ const handleSubmit = () => {
 
       <div>
         <label class="block text-sm font-medium mb-1">Email</label>
-        <input v-model="formData.email" type="email" class="w-full p-2 border rounded" />
+        <input
+          v-model="formData.email"
+          type="email"
+          pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+          class="w-full p-2 border rounded"
+        />
       </div>
 
       <div>
