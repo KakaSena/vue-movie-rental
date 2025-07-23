@@ -1,63 +1,48 @@
 <script setup>
 import { ref } from 'vue'
+import { customerMockData } from '@/mocks/customers'
 import CustomerForm from '@/components/customer/CustomerForm.vue'
 import CustomerTable from '@/components/customer/CustomerTable.vue'
 import Button from '@/components/ui/Button.vue'
 
-const clients = ref([
-  {
-    id: 1,
-    name: 'John Doe',
-    cpf: '12345678900',
-    email: 'john@example.com',
-    phone: '11987654321',
-    status: 'active',
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    cpf: '98765432100',
-    email: 'jane@example.com',
-    phone: '11912345678',
-    status: 'inactive',
-  },
-])
+const customers = ref([...customerMockData])
 
 const isDialogOpen = ref(false)
 const currentCustomer = ref(null)
 
-const openDialog = (client = null) => {
-  currentCustomer.value = client
+const openDialog = (customer = null) => {
+  currentCustomer.value = customer
   isDialogOpen.value = true
 }
 
-const handleSubmit = (clientData) => {
-  if (clientData.id) {
-    const index = clients.value.findIndex((c) => c.id === clientData.id)
+const handleSubmit = (customerData) => {
+  if (customerData.id) {
+    const index = customers.value.findIndex((c) => c.id === customerData.id)
     if (index !== -1) {
-      clients.value[index] = clientData
+      customers.value[index] = customerData
     }
   } else {
-    clients.value.push({
-      ...clientData,
+    customers.value.push({
+      ...customerData,
       id: Date.now(),
     })
   }
   isDialogOpen.value = false
 }
 
-const formatForDisplay = (client) => {
+const formatForDisplay = (customer) => {
   return {
-    ...client,
-    cpf: client.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'),
-    phone: client.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'),
+    ...customer,
+    cpf: customer.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'),
+    phone: customer.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'),
+    cep: customer.cep.replace(/(\d{5})(\d{3})/, '$1-$2'),
   }
 }
 
-const toggleCustomerStatus = (clientId) => {
-  const client = clients.value.find((c) => c.id === clientId)
-  if (client) {
-    client.status = client.status === 'active' ? 'inactive' : 'active'
+const toggleCustomerStatus = (customerId) => {
+  const customer = customers.value.find((c) => c.id === customerId)
+  if (customer) {
+    customer.status = customer.status === 'active' ? 'inactive' : 'active'
   }
 }
 </script>
@@ -77,7 +62,7 @@ const toggleCustomerStatus = (clientId) => {
     />
 
     <CustomerTable
-      :clients="clients.map(formatForDisplay)"
+      :customers="customers.map(formatForDisplay)"
       @edit="openDialog"
       @deactivate="toggleCustomerStatus"
     />
