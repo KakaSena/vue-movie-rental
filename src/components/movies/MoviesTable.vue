@@ -27,9 +27,7 @@ defineProps({
             </th>
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Type
-            </th>
+            ></th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -51,18 +49,7 @@ defineProps({
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="text-sm text-gray-500">{{ movie.Year }}</div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-2 py-1 text-xs font-semibold rounded-full capitalize"
-                :class="{
-                  'bg-blue-100 text-blue-800': movie.Type === 'movie',
-                  'bg-purple-100 text-purple-800': movie.Type === 'series',
-                  'bg-yellow-100 text-yellow-800': movie.Type === 'episode',
-                }"
-              >
-                {{ movie.Type }}
-              </span>
-            </td>
+            <td class="px-6 py-4 whitespace-nowrap"></td>
           </tr>
           <tr v-if="movies.length === 0">
             <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">No movies found</td>
