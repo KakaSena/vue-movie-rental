@@ -13,6 +13,9 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    /* Paths */
+    "baseUrl": ".",
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -22,5 +25,6 @@
     "noUncheckedSideEffectImports": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "vitest.config.ts"],
+  "exclude": ["node_modules"]
 }
