@@ -15,40 +15,50 @@ interface SearchResponse {
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY
 const BASE_URL = import.meta.env.VITE_OMDB_API_URL || 'https://www.omdbapi.com/'
+const RESULTS_PER_PAGE = 10 // OMDB API default
 
 export const searchMovies = async (
   query: string,
   page = 1,
-  type?: string
+  type?: string,
+  totalResults = 30 // Default to fetch 3 pages (30 movies)
 ): Promise<SearchResponse> => {
-  const url = new URL(BASE_URL)
-  url.searchParams.set('apikey', API_KEY)
-  url.searchParams.set('s', query)
-  url.searchParams.set('page', page.toString())
-  if (type) {
-    url.searchParams.set('type', type)
-  }
-
   try {
-    const response = await fetch(url.toString())
+    // Calculate how many pages we need to fetch
+    const pagesToFetch = Math.ceil(totalResults / RESULTS_PER_PAGE)
+    const allMovies: Movie[] = []
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+    for (let currentPage = 1; currentPage <= pagesToFetch; currentPage++) {
+      const url = new URL(BASE_URL)
+      url.searchParams.set('apikey', API_KEY)
+      url.searchParams.set('s', query)
+      url.searchParams.set('page', currentPage.toString())
+      if (type) url.searchParams.set('type', type)
+
+      const response = await fetch(url.toString())
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+      const data: SearchResponse = await response.json()
+      if (data.Response === 'False') throw new Error(data.Error || 'Unknown error occurred')
+
+      allMovies.push(...data.Search)
+
+      // Stop if we've reached the total results or API has no more results
+      if (allMovies.length >= totalResults || data.Search.length < RESULTS_PER_PAGE) break
     }
 
-    const data: SearchResponse = await response.json()
-
-    if (data.Response === 'False') {
-      throw new Error(data.Error || 'Unknown error occurred')
+    return {
+      Search: allMovies.slice(0, totalResults),
+      totalResults: String(allMovies.length),
+      Response: 'True',
     }
-
-    return data
   } catch (error) {
     console.error('Error fetching movies:', error)
     throw error
   }
 }
 
+// getMovieDetails remains the same
 export const getMovieDetails = async (imdbID: string) => {
   const url = new URL(BASE_URL)
   url.searchParams.set('apikey', API_KEY)
@@ -57,11 +67,7 @@ export const getMovieDetails = async (imdbID: string) => {
 
   try {
     const response = await fetch(url.toString())
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
     return await response.json()
   } catch (error) {
     console.error('Error fetching movie details:', error)
