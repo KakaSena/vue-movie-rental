@@ -32,7 +32,24 @@ watch(
 )
 
 const handleSubmit = () => {
+  if (!formData.value.name.trim() || !formData.value.document.trim()) {
+    toast.error('Please fill all required fields', {
+      position: 'top-right',
+      autoClose: 3000,
+    })
+    return
+  }
+
+  // For mock data, we can just emit and show success immediately
   emit('submit', formData.value)
+  toast.success(props.user ? 'User updated successfully!' : 'User created successfully!', {
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+  })
+  emit('close')
 }
 </script>
 
