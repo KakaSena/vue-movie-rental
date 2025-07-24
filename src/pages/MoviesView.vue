@@ -1,15 +1,32 @@
 <script setup>
+import { ref, computed } from 'vue'
 import SearchInput from '@/components/search/SearchInput.vue'
 import SelectInput from '@/components/search/SelectInput.vue'
-import MoviesTable from '@/components/movies/MoviesTable.vue'
+import MoviesCard from '@/components/movies/MoviesCard.vue'
 import MoviesStatus from '@/components/movies/MoviesStatus.vue'
 import useMovies from '@/composables/useMovies.ts'
 
 const { searchQuery, yearFilter, isLoading, error, yearOptions, filteredMovies, fetchMovies } =
   useMovies()
 
-// Initial fetch
 fetchMovies()
+
+const currentPage = ref(1)
+const itemsPerPage = 20
+
+const totalPages = computed(() => Math.ceil(filteredMovies.value.length / itemsPerPage))
+
+const paginatedMovies = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredMovies.value.slice(start, end)
+})
+
+import { watch } from 'vue'
+
+watch([searchQuery, yearFilter], () => {
+  currentPage.value = 1
+})
 </script>
 
 <template>
@@ -24,10 +41,22 @@ fetchMovies()
       </div>
     </div>
 
-    <!-- Status Components -->
     <MoviesStatus :isLoading="isLoading" :error="error" />
 
-    <!-- Movie Table -->
-    <MoviesTable v-if="!isLoading && !error" :movies="filteredMovies" />
+    <MoviesCard v-if="!isLoading && !error" :movies="paginatedMovies" />
+
+    <div v-if="totalPages > 1" class="flex justify-center items-center gap-2 mt-4">
+      <button
+        v-for="page in totalPages"
+        :key="page"
+        @click="currentPage = page"
+        :class="[
+          'px-3 py-1 rounded border transition',
+          currentPage === page ? 'bg-blue-950 text-white' : 'bg-white text-gray-800',
+        ]"
+      >
+        {{ page }}
+      </button>
+    </div>
   </div>
 </template>
