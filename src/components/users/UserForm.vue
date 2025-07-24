@@ -40,7 +40,6 @@ const handleSubmit = () => {
     return
   }
 
-  // For mock data, we can just emit and show success immediately
   emit('submit', formData.value)
   toast.success(props.user ? 'User updated successfully!' : 'User created successfully!', {
     position: 'top-right',
