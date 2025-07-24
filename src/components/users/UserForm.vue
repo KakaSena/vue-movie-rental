@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import BaseDialog from '@/components/ui/BaseDialog.vue'
 import Button from '@/components/ui/Button.vue'
+import { toast } from 'vue3-toastify'
 
 const props = defineProps({
   isOpen: {

@@ -1,6 +1,7 @@
 <script setup>
 import Table from '@/components/ui/Tables.vue'
 import Button from '@/components/ui/Button.vue'
+import { toast } from 'vue3-toastify'
 
 const props = defineProps({
   users: {
@@ -17,26 +18,40 @@ const columns = [
   { key: 'document', label: 'Document' },
   {
     key: 'status',
-    render: (customer) => `
+    render: (user) => `
       <span class="px-2 py-1 text-xs font-semibold rounded-full
-        ${customer.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-        ${customer.status}
+        ${user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+        ${user.status}
       </span>
     `,
   },
 ]
 
+const handleStatusChange = (user) => {
+  emit('deactivate', user.id)
+  toast.success(`User ${user.status === 'active' ? 'deactivated' : 'activated'} successfully!`, {
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  })
+}
+
 const actions = [
   {
+    key: 'edit',
     label: 'Edit',
-    handler: (user) => emit('edit', user),
     size: 'sm',
+    handler: (user) => emit('edit', user),
   },
   {
+    key: 'toggle-status',
     label: (user) => (user.status === 'active' ? 'Deactivate' : 'Activate'),
-    handler: (user) => emit('deactivate', user.id),
     size: 'sm',
     variant: 'outline',
+    handler: handleStatusChange,
   },
 ]
 </script>
