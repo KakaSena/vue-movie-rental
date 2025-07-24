@@ -1,75 +1,30 @@
-<script setup>
-import { ref, computed } from 'vue'
-import { customerMockData } from '@/mocks/customers'
+<script setup lang="ts">
+import { useDialog } from '@/composables/useDialog'
+import useCustomerStorage from '@/composables/useCustomerStorage'
+import { useCustomerActions } from '@/composables/useCustomerActions'
+import { useCustomerFilters } from '@/composables/useCustomerFilters'
+import { formatCustomerForDisplay } from '@/utils/customerFormatters'
 import CustomerForm from '@/components/customers/CustomerForm.vue'
 import CustomerTable from '@/components/customers/CustomerTable.vue'
 import Button from '@/components/ui/Button.vue'
 import SearchInput from '@/components/search/SearchInput.vue'
 import SelectInput from '@/components/search/SelectInput.vue'
 import { statusUserOptions } from '@/constants/statusOptions'
+import type { Customer } from '@/types/customer'
 
-const customers = ref([...customerMockData])
-const isDialogOpen = ref(false)
-const currentCustomer = ref(null)
-const searchTerm = ref('')
-const statusFilter = ref('all')
+const customers = useCustomerStorage()
+const {
+  isOpen: isDialogOpen,
+  state: currentCustomer,
+  open: openDialog,
+  close: closeDialog,
+} = useDialog<Customer>()
 
-const openDialog = (customer = null) => {
-  currentCustomer.value = customer
-  isDialogOpen.value = true
-}
-
-const handleSubmit = (customerData) => {
-  if (customerData.id) {
-    const index = customers.value.findIndex((c) => c.id === customerData.id)
-    if (index !== -1) {
-      customers.value[index] = customerData
-    }
-  } else {
-    customers.value.push({
-      ...customerData,
-      id: Date.now(),
-    })
-  }
-  isDialogOpen.value = false
-}
-
-const formatForDisplay = (customer) => {
-  return {
-    ...customer,
-    cpf: customer.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'),
-    phone: customer.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'),
-    cep: customer.cep.replace(/(\d{5})(\d{3})/, '$1-$2'),
-  }
-}
-
-const toggleCustomerStatus = (customerId) => {
-  const customer = customers.value.find((c) => c.id === customerId)
-  if (customer) {
-    customer.status = customer.status === 'active' ? 'inactive' : 'active'
-  }
-}
-
-const filteredCustomers = computed(() => {
-  let result = customers.value
-
-  if (statusFilter.value !== 'all') {
-    result = result.filter((customer) => customer.status === statusFilter.value)
-  }
-
-  if (searchTerm.value) {
-    const term = searchTerm.value.toLowerCase()
-    result = result.filter((customer) => {
-      return (
-        customer.firstName.toLowerCase().includes(term) ||
-        customer.lastName.toLowerCase().includes(term) ||
-        customer.cpf.includes(term)
-      )
-    })
-  }
-
-  return result
+const { handleSubmit, toggleCustomerStatus } = useCustomerActions(customers, {
+  onSuccess: closeDialog,
 })
+
+const { searchTerm, statusFilter, filteredCustomers } = useCustomerFilters(customers)
 </script>
 
 <template>
@@ -89,11 +44,11 @@ const filteredCustomers = computed(() => {
       :isOpen="isDialogOpen"
       :customer="currentCustomer"
       @submit="handleSubmit"
-      @close="isDialogOpen = false"
+      @close="closeDialog"
     />
 
     <CustomerTable
-      :customers="filteredCustomers.map(formatForDisplay)"
+      :customers="filteredCustomers.map(formatCustomerForDisplay)"
       @edit="openDialog"
       @deactivate="toggleCustomerStatus"
     />

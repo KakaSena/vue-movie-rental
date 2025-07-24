@@ -5,7 +5,6 @@ import Button from '@/components/ui/Button.vue'
 import { mask } from 'vue-the-mask'
 import { validatePhone, validateCPF, validateCEP } from '@/utils/validators'
 import { fetchAddressByCep } from '@/services/cep'
-import { toast } from 'vue3-toastify'
 
 const props = defineProps({
   isOpen: {
@@ -171,7 +170,7 @@ const handleSubmit = () => {
   const isCepValid = validateCepField() || cepNotFound.value
 
   if (!isPhoneValid || !isCpfValid || (!isCepValid && !cepNotFound.value)) {
-    return
+    return // inválido: não emite nada
   }
 
   if (
@@ -181,10 +180,7 @@ const handleSubmit = () => {
       !formData.value.city.trim() ||
       !formData.value.state.trim())
   ) {
-    toast.error('Please fill all address fields manually', {
-      position: 'top-right',
-      autoClose: 3000,
-    })
+    emit('error', 'Please fill all address fields manually')
     return
   }
 
@@ -198,20 +194,6 @@ const handleSubmit = () => {
   }
 
   emit('submit', submitData)
-
-  toast.success(
-    props.customer ? 'Customer updated successfully!' : 'Customer created successfully!',
-    {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    }
-  )
-
-  emit('close')
 }
 </script>
 
