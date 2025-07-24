@@ -1,5 +1,5 @@
 <script setup>
-import DataTable from '@/components/Tables.vue'
+import Table from '@/components/ui/Tables.vue'
 import Button from '@/components/ui/Button.vue'
 
 const props = defineProps({
@@ -42,5 +42,5 @@ const actions = [
 </script>
 
 <template>
-  <DataTable :items="users" :columns="columns" :actions="actions" empty-message="No users found" />
+  <Table :items="users" :columns="columns" :actions="actions" empty-message="No users found" />
 </template>

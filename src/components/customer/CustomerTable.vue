@@ -1,5 +1,5 @@
 <script setup>
-import DataTable from '@/components/Tables.vue'
+import Table from '@/components/ui/Tables.vue'
 import Button from '@/components/ui/Button.vue'
 
 const props = defineProps({
@@ -82,7 +82,7 @@ const formatAddress = (customer) => {
 </script>
 
 <template>
-  <DataTable
+  <Table
     :items="customers"
     :columns="columns"
     :actions="actions"

@@ -1,5 +1,5 @@
 <script setup>
-import Button from './ui/Button.vue'
+import Button from './Button.vue'
 const props = defineProps({
   items: Array,
   columns: Array,
