@@ -1,4 +1,4 @@
-import type { SelectRentalOption, StatusUsersOption } from '@/types/select'
+import type { StatusRentalOption, StatusUsersOption } from '@/types/select'
 
 export const statusUserOptions: readonly StatusUsersOption[] = [
   { value: 'all', label: 'All Status' },
@@ -6,7 +6,7 @@ export const statusUserOptions: readonly StatusUsersOption[] = [
   { value: 'inactive', label: 'Inactive' },
 ] as const
 
-export const statusRentalOptions: readonly SelectRentalOption[] = [
+export const statusRentalOptions: readonly StatusRentalOption[] = [
   { value: 'all', label: 'All Status' },
   { value: 'rented', label: 'Rented' },
   { value: 'delivered', label: 'Delivered' },
