@@ -15,16 +15,15 @@ interface SearchResponse {
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY
 const BASE_URL = import.meta.env.VITE_OMDB_API_URL || 'https://www.omdbapi.com/'
-const RESULTS_PER_PAGE = 10 // OMDB API default
+const RESULTS_PER_PAGE = 10 // the default is 10
 
 export const searchMovies = async (
   query: string,
   page = 1,
   type?: string,
-  totalResults = 30 // Default to fetch 3 pages (30 movies)
+  totalResults = 50
 ): Promise<SearchResponse> => {
   try {
-    // Calculate how many pages we need to fetch
     const pagesToFetch = Math.ceil(totalResults / RESULTS_PER_PAGE)
     const allMovies: Movie[] = []
 
@@ -43,7 +42,6 @@ export const searchMovies = async (
 
       allMovies.push(...data.Search)
 
-      // Stop if we've reached the total results or API has no more results
       if (allMovies.length >= totalResults || data.Search.length < RESULTS_PER_PAGE) break
     }
 
@@ -58,7 +56,6 @@ export const searchMovies = async (
   }
 }
 
-// getMovieDetails remains the same
 export const getMovieDetails = async (imdbID: string) => {
   const url = new URL(BASE_URL)
   url.searchParams.set('apikey', API_KEY)
