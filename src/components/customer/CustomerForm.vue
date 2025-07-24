@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button.vue'
 import { mask } from 'vue-the-mask'
 import { validatePhone, validateCPF, validateCEP } from '@/utils/validators'
 import { fetchAddressByCep } from '@/services/cep'
+import { toast } from 'vue3-toastify'
 
 const props = defineProps({
   isOpen: {
@@ -181,7 +182,10 @@ const handleSubmit = () => {
       !formData.value.city.trim() ||
       !formData.value.state.trim())
   ) {
-    cepError.value = 'Please fill all address fields manually'
+    toast.error('Please fill all address fields manually', {
+      position: 'top-right',
+      autoClose: 3000,
+    })
     return
   }
 
@@ -195,6 +199,20 @@ const handleSubmit = () => {
   }
 
   emit('submit', submitData)
+
+  toast.success(
+    props.customer ? 'Customer updated successfully!' : 'Customer created successfully!',
+    {
+      position: 'top-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    }
+  )
+
+  emit('close')
 }
 </script>
 
@@ -205,7 +223,6 @@ const handleSubmit = () => {
     @close="$emit('close')"
   >
     <form @submit.prevent="handleSubmit" class="space-y-4">
-      <!-- Name Fields -->
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium mb-1">First Name *</label>
@@ -227,7 +244,6 @@ const handleSubmit = () => {
         </div>
       </div>
 
-      <!-- CPF Field -->
       <div>
         <label class="block text-sm font-medium mb-1">CPF *</label>
         <input
@@ -239,10 +255,9 @@ const handleSubmit = () => {
           :class="{ 'border-red-500': cpfError }"
           placeholder="000.000.000-00"
         />
-        <p v-if="cpfError" class="mt-1 text-sm text-red-600">{{ cpfError }}</p>
+        <!-- <p v-if="cpfError" class="mt-1 text-sm text-red-600">{{ cpfError }}</p> -->
       </div>
 
-      <!-- Email Field -->
       <div>
         <label class="block text-sm font-medium mb-1">Email</label>
         <input v-model="formData.email" type="email" class="w-full p-2 border rounded" />
@@ -291,9 +306,6 @@ const handleSubmit = () => {
             </button>
           </div>
           <p v-if="cepError" class="mt-1 text-sm text-red-600">{{ cepError }}</p>
-          <p v-if="cepNotFound" class="mt-1 text-sm text-yellow-600">
-            CEP not found - please fill address manually
-          </p>
         </div>
 
         <!-- Street -->

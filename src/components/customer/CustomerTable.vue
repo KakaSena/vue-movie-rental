@@ -1,6 +1,7 @@
 <script setup>
 import Table from '@/components/ui/Tables.vue'
 import Button from '@/components/ui/Button.vue'
+import { toast } from 'vue3-toastify'
 
 const props = defineProps({
   customers: {
@@ -52,6 +53,21 @@ const columns = [
   },
 ]
 
+const handleStatusChange = (customer) => {
+  emit('deactivate', customer.id)
+  toast.success(
+    `Customer ${customer.status === 'active' ? 'deactivated' : 'activated'} successfully!`,
+    {
+      position: 'top-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    }
+  )
+}
+
 const actions = [
   {
     key: 'edit',
@@ -64,7 +80,7 @@ const actions = [
     label: (customer) => (customer.status === 'active' ? 'Deactivate' : 'Activate'),
     size: 'sm',
     variant: 'outline',
-    handler: (customer) => emit('deactivate', customer.id),
+    handler: handleStatusChange,
   },
 ]
 
