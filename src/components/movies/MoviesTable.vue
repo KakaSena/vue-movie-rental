@@ -2,6 +2,17 @@
 defineProps({
   movies: Array,
 })
+
+const fallbackImage = '/images/noPoster.jpg'
+
+const getMoviePoster = (poster) => {
+  return poster !== 'N/A' ? poster : fallbackImage
+}
+
+const handleImageError = (event) => {
+  event.target.src = fallbackImage
+  event.target.onerror = null // Prevent infinite loop if fallback fails
+}
 </script>
 
 <template>
@@ -34,11 +45,8 @@ defineProps({
           <tr v-for="movie in movies" :key="movie.imdbID">
             <td class="px-6 py-4 whitespace-nowrap">
               <img
-                :src="
-                  movie.Poster !== 'N/A'
-                    ? movie.Poster
-                    : 'https://via.placeholder.com/50x75?text=No+Poster'
-                "
+                :src="getMoviePoster(movie.Poster)"
+                onerror="this.onerror=null; this.src='/images/noPoster.jpg' "
                 class="h-20 object-cover rounded"
                 :alt="movie.Title"
               />
