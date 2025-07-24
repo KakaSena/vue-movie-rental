@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { customerMockData } from '@/mocks/customers'
-import CustomerForm from '@/components/customer/CustomerForm.vue'
-import CustomerTable from '@/components/customer/CustomerTable.vue'
+import CustomerForm from '@/components/customers/CustomerForm.vue'
+import CustomerTable from '@/components/customers/CustomerTable.vue'
 import Button from '@/components/ui/Button.vue'
 import SearchInput from '@/components/search/SearchInput.vue'
 import SelectInput from '@/components/search/SelectInput.vue'

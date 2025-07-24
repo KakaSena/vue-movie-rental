@@ -44,7 +44,6 @@ const cepError = ref('')
 const cepNotFound = ref(false)
 const isLoadingCep = ref(false)
 
-// Computed property to check if form is valid
 const isFormValid = computed(() => {
   const requiredFieldsValid =
     formData.value.firstName.trim() &&
@@ -255,7 +254,6 @@ const handleSubmit = () => {
           :class="{ 'border-red-500': cpfError }"
           placeholder="000.000.000-00"
         />
-        <!-- <p v-if="cpfError" class="mt-1 text-sm text-red-600">{{ cpfError }}</p> -->
       </div>
 
       <div>
@@ -263,7 +261,6 @@ const handleSubmit = () => {
         <input v-model="formData.email" type="email" class="w-full p-2 border rounded" />
       </div>
 
-      <!-- Phone Field -->
       <div>
         <label class="block text-sm font-medium mb-1">Phone *</label>
         <input
@@ -278,11 +275,9 @@ const handleSubmit = () => {
         <p v-if="phoneError" class="mt-1 text-sm text-red-600">{{ phoneError }}</p>
       </div>
 
-      <!-- Address Section -->
       <div class="space-y-4 border-t pt-4">
         <h3 class="font-medium">Address Information</h3>
 
-        <!-- CEP Field -->
         <div>
           <label class="block text-sm font-medium mb-1">CEP *</label>
           <div class="flex items-center">
@@ -308,7 +303,6 @@ const handleSubmit = () => {
           <p v-if="cepError" class="mt-1 text-sm text-red-600">{{ cepError }}</p>
         </div>
 
-        <!-- Street -->
         <div>
           <label class="block text-sm font-medium mb-1">Street *</label>
           <input
@@ -319,7 +313,6 @@ const handleSubmit = () => {
           />
         </div>
 
-        <!-- Number and Complement -->
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium mb-1">Number</label>
@@ -331,7 +324,6 @@ const handleSubmit = () => {
           </div>
         </div>
 
-        <!-- Neighborhood -->
         <div>
           <label class="block text-sm font-medium mb-1">Neighborhood *</label>
           <input
@@ -342,7 +334,6 @@ const handleSubmit = () => {
           />
         </div>
 
-        <!-- City and State -->
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium mb-1">City *</label>
@@ -365,7 +356,6 @@ const handleSubmit = () => {
         </div>
       </div>
 
-      <!-- Status Field -->
       <div>
         <label class="block text-sm font-medium mb-1">Status</label>
         <select v-model="formData.status" class="w-full p-2 border rounded">
