@@ -7,7 +7,7 @@ const props = defineProps({
   modelValue: {
     type: [String, Number],
     required: true,
-    default: 'all', // Add default value
+    default: 'all',
   },
   options: {
     type: Array,
