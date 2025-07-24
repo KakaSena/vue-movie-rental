@@ -22,15 +22,10 @@ const formData = ref({
   status: 'active',
 })
 
-// Watch for user changes to populate form
 watch(
   () => props.user,
   (newUser) => {
-    if (newUser) {
-      formData.value = { ...newUser }
-    } else {
-      formData.value = { name: '', document: '', status: 'active' }
-    }
+    formData.value = newUser ? { ...newUser } : { name: '', document: '', status: 'active' }
   },
   { immediate: true }
 )
@@ -41,7 +36,7 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <BaseDialog :isOpen="isOpen" :title="user ? 'Edit User' : 'Create User'" @close="$emit('close')">
+  <BaseDialog :is-open="isOpen" :title="user ? 'Edit User' : 'Create User'" @close="$emit('close')">
     <form @submit.prevent="handleSubmit" class="space-y-4">
       <div>
         <label class="block text-sm font-medium mb-1">Name *</label>
