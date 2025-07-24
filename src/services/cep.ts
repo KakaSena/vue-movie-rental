@@ -25,7 +25,7 @@ export const fetchAddressByCep = async (cep: string): Promise<CepResponse> => {
     if (data.erro) {
       return {
         success: false,
-        error: 'CEP not found',
+        error: 'CEP not found, enter address manually',
         address: null,
       }
     }
