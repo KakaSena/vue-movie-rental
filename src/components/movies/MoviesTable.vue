@@ -47,7 +47,7 @@ const handleImageError = (event) => {
               <img
                 :src="getMoviePoster(movie.Poster)"
                 onerror="this.onerror=null; this.src='/images/noPoster.jpg' "
-                class="h-20 object-cover rounded"
+                class="h-25 object-cover rounded aspect-[3/4]"
                 :alt="movie.Title"
               />
             </td>
