@@ -8,6 +8,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [vue(), tailwindcss(), svgLoader()],
   resolve: {
+    extensions: ['.vue', '.js', '.ts', '.jsx', '.tsx', '.json'],
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
