@@ -18,6 +18,7 @@ const columns = [
   { key: 'document', label: 'Document' },
   {
     key: 'status',
+    label: 'Status',
     render: (user) => `
       <span class="px-2 py-1 text-xs font-semibold rounded-full
         ${user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
@@ -29,7 +30,7 @@ const columns = [
 
 const handleStatusChange = (user) => {
   emit('deactivate', user.id)
-  toast.success(`User ${user.status === 'active' ? 'deactivated' : 'activated'} successfully!`, {
+  toast.success(`User ${user.status === 'active' ? 'activated' : 'deactivated'} successfully!`, {
     position: 'top-right',
     autoClose: 3000,
     hideProgressBar: false,
