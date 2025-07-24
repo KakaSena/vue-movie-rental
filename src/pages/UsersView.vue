@@ -34,8 +34,11 @@ const handleSubmit = (userData) => {
   isDialogOpen.value = false
 }
 
-const handleDeactivate = (userId) => {
-  users.value = users.value.filter((user) => user.id !== userId)
+const toggleUserStatus = (userId) => {
+  const user = users.value.find((u) => u.id === userId)
+  if (user) {
+    user.status = user.status === 'active' ? 'inactive' : 'active'
+  }
 }
 </script>
 
@@ -53,6 +56,6 @@ const handleDeactivate = (userId) => {
       @close="isDialogOpen = false"
     />
 
-    <UserTable :users="users" @edit="openDialog" @deactivate="handleDeactivate" />
+    <UserTable :users="users" @edit="openDialog" @deactivate="toggleUserStatus" />
   </div>
 </template>
