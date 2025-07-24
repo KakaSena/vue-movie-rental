@@ -108,15 +108,7 @@ const formatAddress = (customer) => {
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
               <Button size="sm" @click="handleEdit(customer)"> Edit </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                @click="handleDeactivate(customer.id)"
-                :class="{
-                  'text-red-600 border-red-300': customer.status === 'active',
-                  'text-green-600 border-green-300': customer.status === 'inactive',
-                }"
-              >
+              <Button size="sm" variant="outline" @click="handleDeactivate(customer.id)">
                 {{ customer.status === 'active' ? 'Deactivate' : 'Activate' }}
               </Button>
             </td>
