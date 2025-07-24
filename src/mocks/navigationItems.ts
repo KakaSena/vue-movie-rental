@@ -1,5 +1,8 @@
-import { Users, UserPlus, Film, Calendar } from 'lucide-vue-next'
-export const navItemsMockData = [
+// src/mocks/navItems.ts
+import { Film, Users, UserPlus, Calendar } from 'lucide-vue-next'
+import type { NavItem } from '@/types/navigation'
+
+export const navItemsMockData: NavItem[] = [
   {
     path: '/dashboard/movies',
     label: 'Movies',
