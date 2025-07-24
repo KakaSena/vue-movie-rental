@@ -22,7 +22,6 @@ export default function useMovies() {
       const response: SearchResponse = await searchMovies(searchQuery.value || 'movie', 1, 'movie')
       movies.value = (response.Search || []).map((movie) => ({
         ...movie,
-        // Normalize year format by removing any non-year characters
         Year: movie.Year?.replace(/[^0-9–]/g, ''),
       }))
       console.log('Fetched movies:', movies.value)
@@ -38,7 +37,6 @@ export default function useMovies() {
     const years = new Set<string>()
     movies.value.forEach((movie) => {
       if (movie.Year) {
-        // Extract base year (handles both "2025" and "2025–2026" formats)
         const baseYear = movie.Year.split('–')[0].trim()
         years.add(baseYear)
       }
@@ -59,13 +57,11 @@ export default function useMovies() {
     return movies.value.filter((movie) => {
       if (!movie.Year) return false
 
-      // Compare only the base year (first part of range)
       const movieYear = movie.Year.split('–')[0].trim()
       return movieYear === yearFilter.value
     })
   })
 
-  // Debug filter changes
   watch(yearFilter, (newYear) => {
     console.log(`Year filter changed to: ${newYear}`)
     console.log(
@@ -74,7 +70,6 @@ export default function useMovies() {
     )
   })
 
-  // Debounced search
   watch(searchQuery, (newVal: string) => {
     const handler = setTimeout(() => {
       if (newVal.trim().length >= 3 || newVal === '') {
