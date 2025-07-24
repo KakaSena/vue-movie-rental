@@ -6,7 +6,7 @@ import CustomerTable from '@/components/customer/CustomerTable.vue'
 import Button from '@/components/ui/Button.vue'
 import SearchInput from '@/components/search/SearchInput.vue'
 import SelectInput from '@/components/search/SelectInput.vue'
-import { statusOptions } from '@/constants/statusOptions'
+import { statusUserOptions } from '@/constants/statusOptions'
 
 const customers = ref([...customerMockData])
 const isDialogOpen = ref(false)
@@ -79,7 +79,7 @@ const filteredCustomers = computed(() => {
         <SearchInput v-model="searchTerm" placeholder="Search by name or CPF" />
       </div>
       <div class="flex items-center gap-4">
-        <SelectInput v-model="statusFilter" :options="statusOptions" class="w-40" />
+        <SelectInput v-model="statusFilter" :options="statusUserOptions" class="w-40" />
         <Button @click="openDialog()">Add Customer</Button>
       </div>
     </div>
