@@ -1,64 +1,29 @@
-<script setup>
-import { ref, computed } from 'vue'
-import { userMockData } from '@/mocks/users'
-import UserForm from '@/components/users/UserForm.vue'
-import UserTable from '@/components/users/UserTable.vue'
+<script setup lang="ts">
+import type { User } from '@/types/user'
+import { useDialog } from '@/composables/useDialog'
+import { useUserActions } from '@/composables/users/useUserActions'
+import { useUserFilters } from '@/composables/users/useUserFilters'
+import useUserStorage from '@/composables/users/useUserStorage'
+import { statusUserOptions } from '@/constants/statusOptions'
+import Button from '@/components/ui/Button.vue'
 import SearchInput from '@/components/search/SearchInput.vue'
 import SelectInput from '@/components/search/SelectInput.vue'
-import Button from '@/components/ui/Button.vue'
-import { statusUserOptions } from '@/constants/statusOptions'
+import UserForm from '@/components/users/UserForm.vue'
+import UserTable from '@/components/users/UserTable.vue'
 
-const users = ref([...userMockData])
-const searchTerm = ref('')
-const statusFilter = ref('all')
+const users = useUserStorage()
+const {
+  isOpen: isDialogOpen,
+  state: currentUser,
+  open: openDialog,
+  close: closeDialog,
+} = useDialog<User>()
 
-// State
-const isDialogOpen = ref(false)
-const currentUser = ref(null)
-
-const filteredUsers = computed(() => {
-  let result = users.value
-
-  if (statusFilter.value !== 'all') {
-    result = result.filter((user) => user.status === statusFilter.value)
-  }
-
-  if (searchTerm.value) {
-    const term = searchTerm.value.toLowerCase()
-    result = result.filter((user) => {
-      return user.name.toLowerCase().includes(term) || user.document.toLowerCase().includes(term)
-    })
-  }
-
-  return result
+const { handleSubmit, toggleUserStatus } = useUserActions(users, {
+  onSuccess: closeDialog,
 })
 
-const openDialog = (user = null) => {
-  currentUser.value = user
-  isDialogOpen.value = true
-}
-
-const handleSubmit = (userData) => {
-  if (userData.id) {
-    const index = users.value.findIndex((u) => u.id === userData.id)
-    if (index !== -1) {
-      users.value[index] = userData
-    }
-  } else {
-    users.value.push({
-      ...userData,
-      id: Date.now(),
-    })
-  }
-  isDialogOpen.value = false
-}
-
-const toggleUserStatus = (userId) => {
-  const user = users.value.find((u) => u.id === userId)
-  if (user) {
-    user.status = user.status === 'active' ? 'inactive' : 'active'
-  }
-}
+const { searchTerm, statusFilter, filteredUsers } = useUserFilters(users)
 </script>
 
 <template>
@@ -78,7 +43,7 @@ const toggleUserStatus = (userId) => {
       :isOpen="isDialogOpen"
       :user="currentUser"
       @submit="handleSubmit"
-      @close="isDialogOpen = false"
+      @close="closeDialog"
     />
 
     <UserTable :users="filteredUsers" @edit="openDialog" @deactivate="toggleUserStatus" />
