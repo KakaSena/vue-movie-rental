@@ -1,4 +1,3 @@
-// src/mocks/customers.ts
 import type { Customer } from '@/types/customer'
 
 export const customerMockData: Customer[] = [
