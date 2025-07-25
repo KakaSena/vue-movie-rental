@@ -40,8 +40,8 @@ export function useRentals(getMovieById?: (id: string) => Movie | undefined) {
           }
         }
 
-        const customer = customers.value.find((c) => c.id === rental.customerId) ?? {
-          id: rental.customerId,
+        const customer = customers.value.find((c) => c.id === Number(rental.customerId)) ?? {
+          id: Number(rental.customerId),
           firstName: 'Unknown',
           lastName: 'Customer',
           cpf: '',
@@ -97,7 +97,9 @@ export function useRentals(getMovieById?: (id: string) => Movie | undefined) {
 
   const canCustomerRent = (customerId: string): boolean => {
     return !rentals.value.some(
-      (r) => r.customerId === customerId && (r.status === 'rented' || r.status === 'overdue')
+      (r) =>
+        Number(r.customerId) === Number(customerId) &&
+        (r.status === 'rented' || r.status === 'overdue')
     )
   }
 
