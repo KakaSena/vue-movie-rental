@@ -84,11 +84,6 @@ const handleSubmit = async () => {
             {{ isLoading ? 'Signing in...' : 'Sign In' }}
           </button>
         </form>
-        <div class="mt-4 p-3 bg-gray-100 rounded-md">
-          <p class="text-sm text-gray-500">Demo credentials:</p>
-          <p class="text-sm">Document: 123456789</p>
-          <p class="text-sm">Password: admin123</p>
-        </div>
       </div>
     </div>
   </div>
