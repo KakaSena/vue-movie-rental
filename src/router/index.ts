@@ -49,7 +49,6 @@ const routes: RouteRecordRaw[] = [
   },
 ]
 
-// Adicionando suporte a 'meta.title'
 declare module 'vue-router' {
   interface RouteMeta {
     requiresAuth?: boolean
