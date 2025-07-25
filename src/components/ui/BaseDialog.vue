@@ -31,11 +31,11 @@ const emit = defineEmits(['close'])
     <div class="fixed inset-0 flex items-center justify-center p-4">
       <DialogPanel
         :class="[
-          'w-full rounded-lg bg-white p-6 shadow-xl',
+          'w-full max-h-[90vh] overflow-y-auto rounded-lg bg-white p-6 shadow-xl',
           {
             'max-w-sm': size === 'sm',
             'max-w-md': size === 'md',
-            'max-w-lg': size === 'lg',
+            'max-w-4xl': size === 'lg', // increase to a wider max width
           },
         ]"
       >

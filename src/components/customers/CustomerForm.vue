@@ -7,14 +7,8 @@ import { validatePhone, validateCPF, validateCEP } from '@/utils/validators'
 import { fetchAddressByCep } from '@/services/cep'
 
 const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true,
-  },
-  customer: {
-    type: Object,
-    default: null,
-  },
+  isOpen: { type: Boolean, required: true },
+  customer: { type: Object, default: null },
 })
 
 const emit = defineEmits(['submit', 'close'])
@@ -44,34 +38,31 @@ const cepNotFound = ref(false)
 const isLoadingCep = ref(false)
 
 const isFormValid = computed(() => {
-  const requiredFieldsValid =
-    formData.value.firstName.trim() &&
-    formData.value.lastName.trim() &&
-    !cpfError.value &&
-    !phoneError.value &&
-    (!cepError.value || cepNotFound.value)
+  const firstName = formData.value.firstName.trim()
+  const lastName = formData.value.lastName.trim()
+  const street = formData.value.street.trim()
+  const neighborhood = formData.value.neighborhood.trim()
+  const city = formData.value.city.trim()
+  const state = formData.value.state.trim()
+  const cpfErr = cpfError.value
+  const phoneErr = phoneError.value
+  const cepErr = cepError.value
+  const cepNotFoundVal = cepNotFound.value
 
-  if (cepNotFound.value) {
-    return (
-      requiredFieldsValid &&
-      formData.value.street.trim() &&
-      formData.value.neighborhood.trim() &&
-      formData.value.city.trim() &&
-      formData.value.state.trim()
-    )
+  const requiredFieldsValid =
+    firstName && lastName && !cpfErr && !phoneErr && (!cepErr || cepNotFoundVal)
+
+  if (cepNotFoundVal) {
+    return requiredFieldsValid && street && neighborhood && city && state
   }
 
   return requiredFieldsValid
 })
-
 watch(
   () => props.customer,
   (newCustomer) => {
     if (newCustomer) {
-      formData.value = {
-        ...newCustomer,
-        id: newCustomer.id,
-      }
+      formData.value = { ...newCustomer, id: newCustomer.id }
       cepNotFound.value = false
     } else {
       formData.value = {
@@ -99,9 +90,7 @@ watch(
   { immediate: true }
 )
 
-const validateEmail = (email) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-}
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 const validatePhoneField = () => {
   if (!formData.value.phone) {
@@ -203,8 +192,8 @@ const handleSubmit = () => {
     :title="customer ? 'Edit Customer' : 'Create Customer'"
     @close="$emit('close')"
   >
-    <form @submit.prevent="handleSubmit" class="space-y-4">
-      <div class="grid grid-cols-2 gap-4">
+    <form @submit.prevent="handleSubmit" class="space-y-6 max-h-[90vh] overflow-auto px-4 py-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium mb-1">First Name *</label>
           <input
@@ -225,22 +214,23 @@ const handleSubmit = () => {
         </div>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">CPF *</label>
-        <input
-          v-model="formData.cpf"
-          v-mask="'###.###.###-##'"
-          @blur="validateCpfField"
-          required
-          class="w-full p-2 border rounded"
-          :class="{ 'border-red-500': cpfError }"
-          placeholder="000.000.000-00"
-        />
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1">Email</label>
-        <input v-model="formData.email" type="email" class="w-full p-2 border rounded" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">CPF *</label>
+          <input
+            v-model="formData.cpf"
+            v-mask="'###.###.###-##'"
+            @blur="validateCpfField"
+            required
+            class="w-full p-2 border rounded"
+            :class="{ 'border-red-500': cpfError }"
+            placeholder="000.000.000-00"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Email</label>
+          <input v-model="formData.email" type="email" class="w-full p-2 border rounded" />
+        </div>
       </div>
 
       <div>
@@ -257,12 +247,12 @@ const handleSubmit = () => {
         <p v-if="phoneError" class="mt-1 text-sm text-red-600">{{ phoneError }}</p>
       </div>
 
-      <div class="space-y-4 border-t pt-4">
-        <h3 class="font-medium">Address Information</h3>
+      <h3 class="font-semibold border-t pt-4 mb-2">Address Information</h3>
 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium mb-1">CEP *</label>
-          <div class="flex items-center">
+          <div class="flex items-center gap-2">
             <input
               v-model="formData.cep"
               v-mask="'#####-###'"
@@ -275,7 +265,7 @@ const handleSubmit = () => {
             <button
               type="button"
               @click="fetchAddress"
-              class="ml-2 px-3 py-2 bg-gray-100 rounded hover:bg-gray-200"
+              class="px-3 py-2 bg-gray-100 rounded hover:bg-gray-200"
               :disabled="isLoadingCep"
             >
               <span v-if="isLoadingCep">...</span>
@@ -294,47 +284,47 @@ const handleSubmit = () => {
             :class="{ 'border-red-500': cepNotFound && !formData.street.trim() }"
           />
         </div>
+      </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Number</label>
-            <input v-model="formData.number" class="w-full p-2 border rounded" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Complement</label>
-            <input v-model="formData.complement" class="w-full p-2 border rounded" />
-          </div>
-        </div>
-
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium mb-1">Neighborhood *</label>
+          <label class="block text-sm font-medium mb-1">Number</label>
+          <input v-model="formData.number" class="w-full p-2 border rounded" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Complement</label>
+          <input v-model="formData.complement" class="w-full p-2 border rounded" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Neighborhood *</label>
+        <input
+          v-model="formData.neighborhood"
+          required
+          class="w-full p-2 border rounded"
+          :class="{ 'border-red-500': cepNotFound && !formData.neighborhood.trim() }"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">City *</label>
           <input
-            v-model="formData.neighborhood"
+            v-model="formData.city"
             required
             class="w-full p-2 border rounded"
-            :class="{ 'border-red-500': cepNotFound && !formData.neighborhood.trim() }"
+            :class="{ 'border-red-500': cepNotFound && !formData.city.trim() }"
           />
         </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">City *</label>
-            <input
-              v-model="formData.city"
-              required
-              class="w-full p-2 border rounded"
-              :class="{ 'border-red-500': cepNotFound && !formData.city.trim() }"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">State *</label>
-            <input
-              v-model="formData.state"
-              required
-              class="w-full p-2 border rounded"
-              :class="{ 'border-red-500': cepNotFound && !formData.state.trim() }"
-            />
-          </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">State *</label>
+          <input
+            v-model="formData.state"
+            required
+            class="w-full p-2 border rounded"
+            :class="{ 'border-red-500': cepNotFound && !formData.state.trim() }"
+          />
         </div>
       </div>
 
@@ -347,10 +337,8 @@ const handleSubmit = () => {
       </div>
 
       <div class="flex justify-end space-x-2 pt-4">
-        <Button type="button" variant="outline" @click="$emit('close')"> Cancel </Button>
-        <Button type="submit" :disabled="!isFormValid">
-          {{ customer ? 'Update' : 'Create' }}
-        </Button>
+        <Button type="button" variant="outline" @click="$emit('close')">Cancel</Button>
+        <Button type="submit" :disabled="!isFormValid">{{ customer ? 'Update' : 'Create' }}</Button>
       </div>
     </form>
   </BaseDialog>
