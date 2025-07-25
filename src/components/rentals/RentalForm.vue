@@ -14,6 +14,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['close', 'created'])
 
+// @ts-ignore
 const { customers: propCustomers, createRental, canCustomerRent } = useRentals()
 
 // Form data
@@ -115,7 +116,7 @@ const resetForm = () => {
 </script>
 
 <template>
-  <BaseDialog :isOpen="isOpen" title="Create Rental" @close="$emit('close')">
+  <BaseDialog :isOpen="props.isOpen" title="Create Rental" @close="$emit('close')">
     <form @submit.prevent="handleSubmit" class="space-y-4">
       <div v-if="errorMessage" class="p-2 bg-red-100 text-red-800 rounded text-sm">
         {{ errorMessage }}

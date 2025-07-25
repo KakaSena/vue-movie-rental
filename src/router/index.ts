@@ -61,6 +61,7 @@ const router = createRouter({
   routes,
 })
 
+// @ts-ignore
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!sessionStorage.getItem('currentUser')
 

@@ -25,7 +25,7 @@ const emit = defineEmits(['close'])
 </script>
 
 <template>
-  <Dialog :open="isOpen" @close="emit('close')" class="relative z-50">
+  <Dialog :open="props.isOpen" @close="emit('close')" class="relative z-50">
     <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
 
     <div class="fixed inset-0 flex items-center justify-center p-4">

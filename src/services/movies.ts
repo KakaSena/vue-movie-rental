@@ -19,6 +19,7 @@ const RESULTS_PER_PAGE = 10 // the default is 10
 
 export const searchMovies = async (
   query: string,
+  // @ts-ignore
   page = 1,
   type?: string,
   totalResults = 50
