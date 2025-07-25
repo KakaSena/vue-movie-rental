@@ -1,28 +1,27 @@
-<script setup>
-import { ref, computed } from 'vue'
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue'
 import SearchInput from '@/components/search/SearchInput.vue'
 import SelectInput from '@/components/search/SelectInput.vue'
 import MoviesCard from '@/components/movies/MoviesCard.vue'
 import MoviesStatus from '@/components/movies/MoviesStatus.vue'
 import useMovies from '@/composables/useMovies.ts'
+import type { Movie } from '@/types/movies'
 
 const { searchQuery, yearFilter, isLoading, error, yearOptions, filteredMovies, fetchMovies } =
   useMovies()
 
 fetchMovies()
 
-const currentPage = ref(1)
+const currentPage = ref<number>(1)
 const itemsPerPage = 20
 
-const totalPages = computed(() => Math.ceil(filteredMovies.value.length / itemsPerPage))
+const totalPages = computed<number>(() => Math.ceil(filteredMovies.value.length / itemsPerPage))
 
-const paginatedMovies = computed(() => {
+const paginatedMovies = computed<Movie[]>(() => {
   const start = (currentPage.value - 1) * itemsPerPage
   const end = start + itemsPerPage
   return filteredMovies.value.slice(start, end)
 })
-
-import { watch } from 'vue'
 
 watch([searchQuery, yearFilter], () => {
   currentPage.value = 1
