@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useDialog } from '@/composables/useDialog'
-import useCustomerStorage from '@/composables/useCustomerStorage'
-import { useCustomerActions } from '@/composables/useCustomerActions'
-import { useCustomerFilters } from '@/composables/useCustomerFilters'
+import useCustomerStorage from '@/composables/customers/useCustomerStorage'
+import { useCustomerActions } from '@/composables/customers/useCustomerActions'
+import { useCustomerFilters } from '@/composables/customers/useCustomerFilters'
 import { formatCustomerForDisplay } from '@/utils/customerFormatters'
 import CustomerForm from '@/components/customers/CustomerForm.vue'
 import CustomerTable from '@/components/customers/CustomerTable.vue'
