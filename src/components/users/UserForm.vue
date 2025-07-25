@@ -48,6 +48,10 @@ const handleSubmit = async () => {
       return
     }
 
+    if (formData.value.password !== formData.value.confirmPassword) {
+      toast.error('Passwords do not match')
+      return
+    }
     const { confirmPassword, ...userData } = formData.value
     emit('submit', formData.value)
   }
