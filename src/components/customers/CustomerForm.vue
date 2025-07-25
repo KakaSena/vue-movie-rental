@@ -170,7 +170,7 @@ const handleSubmit = () => {
   const isCepValid = validateCepField() || cepNotFound.value
 
   if (!isPhoneValid || !isCpfValid || (!isCepValid && !cepNotFound.value)) {
-    return // inválido: não emite nada
+    return
   }
 
   if (
