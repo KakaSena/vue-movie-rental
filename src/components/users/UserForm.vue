@@ -26,7 +26,9 @@ const formData = ref({
 watch(
   () => props.user,
   (newUser) => {
-    formData.value = newUser ? { ...newUser } : { name: '', document: '', status: 'active' }
+    formData.value = newUser
+      ? { ...newUser, password: '', confirmPassword: '' }
+      : { name: '', document: '', password: '', confirmPassword: '', status: 'active' }
   },
   { immediate: true }
 )
@@ -40,7 +42,15 @@ const handleSubmit = async () => {
     return
   }
 
-  emit('submit', formData.value)
+  if (!props.user || formData.value.password) {
+    if (formData.value.password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+
+    const { confirmPassword, ...userData } = formData.value
+    emit('submit', formData.value)
+  }
 }
 </script>
 
@@ -55,6 +65,31 @@ const handleSubmit = async () => {
       <div>
         <label class="block text-sm font-medium mb-1">Document *</label>
         <input v-model="formData.document" required class="w-full p-2 border rounded" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">
+          {{ user ? 'New Password' : 'Password *' }}
+        </label>
+        <input
+          v-model="formData.password"
+          type="password"
+          :required="!user"
+          class="w-full p-2 border rounded"
+        />
+        <p class="text-xs text-gray-500 mt-1" v-if="user">Leave blank to keep current password</p>
+      </div>
+
+      <div v-if="!user || formData.password">
+        <label class="block text-sm font-medium mb-1">
+          {{ user ? 'Confirm New Password' : 'Confirm Password *' }}
+        </label>
+        <input
+          v-model="formData.confirmPassword"
+          type="password"
+          :required="!user || formData.password"
+          class="w-full p-2 border rounded"
+        />
       </div>
 
       <div>
