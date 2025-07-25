@@ -18,7 +18,7 @@ const props = defineProps({
     type: String,
     default: 'Select an option',
   },
-  class: {
+  customClass: {
     type: String,
     default: 'w-40',
   },
@@ -37,7 +37,7 @@ const updateValue = (value) => {
 
 <template>
   <Listbox :modelValue="modelValue" @update:modelValue="updateValue">
-    <div class="relative" :class="class">
+    <div class="relative" :class="customClass">
       <ListboxButton
         class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
       >
