@@ -61,7 +61,7 @@ const router = createRouter({
   routes,
 })
 
-// Redirecionamento e proteção de rotas
+// @ts-ignore
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!sessionStorage.getItem('currentUser')
 
