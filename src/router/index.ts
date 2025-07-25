@@ -8,38 +8,38 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     name: 'Login',
     component: () => import('@/pages/LoginView.vue'),
-    meta: { requiresAuth: false },
+    meta: { requiresAuth: false, title: '🔐 Login' },
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import('@/pages/Dashboard.vue'),
     redirect: '/dashboard/movies',
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, title: 'Dashboard' },
     children: [
       {
         path: 'movies',
         component: () => import('@/pages/MoviesView.vue'),
         name: 'Movies',
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, title: '📽️ Movies' },
       },
       {
         path: 'users',
         component: () => import('@/pages/UsersView.vue'),
         name: 'Users',
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, title: '👤 Users' },
       },
       {
         path: 'customers',
         component: () => import('@/pages/CustomerView.vue'),
         name: 'Customers',
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, title: '👥 Customers' },
       },
       {
         path: 'rentals',
         component: () => import('@/pages/RentalsView.vue'),
         name: 'Rentals',
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, title: '📦 Rentals' },
       },
     ],
   },
@@ -49,10 +49,11 @@ const routes: RouteRecordRaw[] = [
   },
 ]
 
-// Type for route meta
+// Adicionando suporte a 'meta.title'
 declare module 'vue-router' {
   interface RouteMeta {
     requiresAuth?: boolean
+    title?: string
   }
 }
 
@@ -61,7 +62,7 @@ const router = createRouter({
   routes,
 })
 
-// @ts-ignore
+// Redirecionamento e proteção de rotas
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!sessionStorage.getItem('currentUser')
 
@@ -73,6 +74,12 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+// Atualiza o título da aba com base na rota ativa
+router.afterEach((to) => {
+  const defaultTitle = 'Vue Movie Rental'
+  document.title = to.meta.title || defaultTitle
 })
 
 export default router
