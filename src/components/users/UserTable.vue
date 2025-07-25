@@ -30,14 +30,6 @@ const columns = [
 
 const handleStatusChange = (user) => {
   emit('deactivate', user.id)
-  toast.success(`User ${user.status === 'active' ? 'activated' : 'deactivated'} successfully!`, {
-    position: 'top-right',
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  })
 }
 
 const actions = [

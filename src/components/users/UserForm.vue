@@ -31,7 +31,7 @@ watch(
   { immediate: true }
 )
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (!formData.value.name.trim() || !formData.value.document.trim()) {
     toast.error('Please fill all required fields', {
       position: 'top-right',
@@ -41,14 +41,6 @@ const handleSubmit = () => {
   }
 
   emit('submit', formData.value)
-  toast.success(props.user ? 'User updated successfully!' : 'User created successfully!', {
-    position: 'top-right',
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-  })
-  emit('close')
 }
 </script>
 
