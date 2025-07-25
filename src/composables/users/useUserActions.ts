@@ -13,12 +13,19 @@ export function useUserActions(
       if (userData.id) {
         const index = users.value.findIndex((c: User) => c.id === userData.id)
         if (index !== -1) {
+          if (!userData.password) {
+            userData.password = users.value[index].password
+          }
           users.value[index] = userData
           toast.success('User updated successfully!')
           options?.onSuccess?.()
           return true
         }
       } else {
+        if (!userData.password) {
+          toast.error('Password is required for new users')
+          return false
+        }
         users.value.push({
           ...userData,
           id: Date.now(),
