@@ -42,18 +42,31 @@ const handleSubmit = async () => {
     return
   }
 
-  if (!props.user || formData.value.password) {
+  if (!props.user) {
     if (formData.value.password.length < 6) {
       toast.error('Password must be at least 6 characters')
       return
     }
-
     if (formData.value.password !== formData.value.confirmPassword) {
       toast.error('Passwords do not match')
       return
     }
     const { confirmPassword, ...userData } = formData.value
-    emit('submit', formData.value)
+    emit('submit', userData)
+  } else {
+    if (formData.value.password) {
+      if (formData.value.password.length < 6) {
+        toast.error('Password must be at least 6 characters')
+        return
+      }
+      if (formData.value.password !== formData.value.confirmPassword) {
+        toast.error('Passwords do not match')
+        return
+      }
+    }
+    const { confirmPassword, ...userData } = formData.value
+
+    emit('submit', userData)
   }
 }
 </script>
