@@ -9,5 +9,5 @@ export const statusUserOptions: readonly StatusUsersOption[] = [
 export const statusRentalOptions: readonly StatusRentalOption[] = [
   { value: 'all', label: 'All Status' },
   { value: 'rented', label: 'Rented' },
-  { value: 'delivered', label: 'Delivered' },
+  { value: 'returned', label: 'Returned' },
 ] as const
