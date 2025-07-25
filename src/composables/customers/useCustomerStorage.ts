@@ -1,7 +1,6 @@
-// src/composables/useCustomerStorage.ts
 import { useStorage } from '@vueuse/core'
 import { customerMockData } from '@/mocks/customers'
-import type { Customer } from '@/types/customer' // Assuming you have a Customer type
+import type { Customer } from '@/types/customer'
 
 export default function useCustomerStorage() {
   const customers = useStorage<Customer[]>('customers', customerMockData)
