@@ -32,7 +32,9 @@ export default function useMovies() {
       isLoading.value = false
     }
   }
-
+  const getMovieById = (id: string): Movie | undefined => {
+    return movies.value.find((movie) => movie.imdbID === id)
+  }
   const yearOptions = computed<YearOption[]>(() => {
     const years = new Set<string>()
     movies.value.forEach((movie) => {
@@ -89,5 +91,6 @@ export default function useMovies() {
     yearOptions,
     filteredMovies,
     fetchMovies,
+    getMovieById,
   }
 }
